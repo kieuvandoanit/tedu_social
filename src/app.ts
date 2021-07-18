@@ -28,13 +28,20 @@ export default class App{
 
     private connectToDatabase(){
         try {
-            mongoose.connect('mongodb://localhost/tedu_social',{
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false,
-            useCreateIndex: true
-            });
-            console.log('database connected');
+            const connectString = process.env.MONGODB_URI;
+            if(!connectString){
+                console.log('Connection string is invalid');
+                return;
+            }else{
+                mongoose.connect(connectString,{
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true,
+                    useFindAndModify: false,
+                    useCreateIndex: true
+                    });
+                console.log('database connected');
+            }
+            
         } catch (error) {
             console.log('Connect to database error');
         }  
