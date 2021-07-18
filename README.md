@@ -17,3 +17,10 @@
 - git push -u origin master
 ### Lession 10
 - tsc --init 
+### Lession 15
+- role of some middleware
+    - hpp: bảo về giúp chống lại các tấn công khi dùng http parameter
+    - helmet: add các header bảo mật cho http request
+    - morgan: để logging cho dự án. (seri log)
+    - cors: Cho phép những domain nào của client được vào
+    - winston: làm cho log có màu đẹp hơn
