@@ -29,3 +29,5 @@
 
 ### Lession 17
 - import package tsconfig-paths: to nodemon understand đường dẫn  in import file (cu phap: @)
+- import package gravatar: để làm ảnh đại diện 
+- import package bcryptjs để mã hóa
