@@ -1,11 +1,11 @@
-import { Route } from 'core/interfaces';
+import { Route } from '@core/interfaces';
 import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import cors from 'cors';
-import { Logger } from './core/utils';
+import { Logger } from '@core/utils';
 
 
 export default class App{

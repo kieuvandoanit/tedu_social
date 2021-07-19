@@ -25,4 +25,7 @@
     - cors: Cho phép những domain nào của client được vào
     - winston: làm cho log có màu đẹp hơn
 ### Lession 16
-- Validate var envoriment
+- Validate var enviroment
+
+### Lession 17
+- import package tsconfig-paths: to nodemon understand đường dẫn  in import file (cu phap: @)
