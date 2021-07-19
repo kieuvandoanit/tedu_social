@@ -51,9 +51,10 @@ export default class App{
                 cors({origin: "your.domain.com", credentials:true})
             );
         }
-        this.app.use(errorMiddleware);
+        
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: true}));
+        this.app.use(errorMiddleware);
     }
 
     private connectToDatabase(){

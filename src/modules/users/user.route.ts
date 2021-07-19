@@ -1,5 +1,7 @@
 import { Route } from "@core/interfaces";
+import validationMiddleware from "@core/middleware/validation.middleware";
 import { Router } from "express";
+import RegisterDto from "./dtos/register.dto";
 import UsersController from "./users.controller";
 
 export default class IndexRoute implements Route{
@@ -13,6 +15,10 @@ export default class IndexRoute implements Route{
     }
 
     private initializeRoutes(){
-        this.router.post(this.path, this.usersController.register);
+        this.router.post(
+            this.path, 
+            validationMiddleware(RegisterDto, true), 
+            this.usersController.register
+            );
     }
 }
