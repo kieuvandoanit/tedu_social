@@ -8,6 +8,7 @@ import gravatar from 'gravatar';
 import bcryptjs from 'bcryptjs';
 import IUser from './users.interface';
 import jwt from 'jsonwebtoken';
+import { IPagination } from '@core/interfaces';
 class UserService{
     public userSchema = UserSchema;
 
@@ -91,6 +92,33 @@ class UserService{
         if(!updateUserById) throw new HttpException(409, 'You are not an user');
 
         return updateUserById;
+    }
+
+    public async getAll(): Promise<IUser[]>{
+        const users = await this.userSchema.find().exec();
+        return users;
+    }
+
+    public async getAllPaging(keyword: string, page: number): Promise<IPagination<IUser>>{
+        const pageSize:number = Number(process.env.PAGE_SIZE||10);
+        let query; 
+        if(keyword){
+            query = this.userSchema.find({$or:[{email: keyword}, {first_name: keyword}, {last_name: keyword}]}).sort({date: -1});
+        }{
+            query = this.userSchema.find().sort({date: -1});
+        }
+        
+        
+        const users = await query.skip((page - 1)*pageSize).limit(pageSize).exec();
+        
+        const rowCount = await query.estimatedDocumentCount().exec();
+        
+        return {
+            total: rowCount,
+            page: page,
+            pageSize: pageSize,
+            items: users,
+        } as IPagination<IUser>;
     }
 
     private createToken(user:IUser):TokenData{
