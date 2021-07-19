@@ -24,3 +24,5 @@
     - morgan: để logging cho dự án. (seri log)
     - cors: Cho phép những domain nào của client được vào
     - winston: làm cho log có màu đẹp hơn
+### Lession 16
+- Validate var envoriment
