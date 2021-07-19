@@ -6,6 +6,7 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import cors from 'cors';
 import { Logger } from '@core/utils';
+import { errorMiddleware } from '@core/middleware';
 
 
 export default class App{
@@ -49,6 +50,7 @@ export default class App{
                 cors({origin: "your.domain.com", credentials:true})
             );
         }
+        this.app.use(errorMiddleware);
     }
 
     private connectToDatabase(){
