@@ -1,3 +1,4 @@
 import UserSchema from './users.model';
 import UsersRoute from '@modules/users/user.route';
-export {UsersRoute, UserSchema};
+import IUser from './users.interface';
+export {UsersRoute, UserSchema, IUser};

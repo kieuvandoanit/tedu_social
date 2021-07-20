@@ -150,6 +150,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-15.14.2.tgz#7af8ab20156586f076f4760bc1b3c5ddfffd1ff2"
   integrity sha512-dvMUE/m2LbXPwlvVuzCyslTEtQ2ZwuuFClDrOQ6mp2CenCg971719PTILZ4I6bTP27xfFFc+o7x2TkLuun/MPw==
 
+"@types/normalize-url@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@types/normalize-url/-/normalize-url-4.2.0.tgz#b72486d1d87e70b2b94bd34d9300fe41c736f788"
+  integrity sha512-lMD7+DEzeaAWiJzVzlFJHWCRi/SConK0T/dMxIUYw+r0Et0xNo5yN9b0wa8NUgqECJfAbPYneecqDxQNyhTHnA==
+  dependencies:
+    normalize-url "*"
+
 "@types/qs@*":
   version "6.9.7"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
@@ -1378,6 +1385,16 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
+
+normalize-url@*:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-7.0.0.tgz#7150a7eaf78d48b4a1e57d2b52de579e6b31fd30"
+  integrity sha512-a7y92XA/bHw9sGhkjgyIuEdP/EItvGVkvzTusBPsvMhuy6ZK0+ET1jQdv2L5yvHlEjE0IFBovEzvwVPbIb+eIg==
+
+normalize-url@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-5.3.0.tgz#8959b3cdaa295b61592c1f245dded34b117618dd"
+  integrity sha512-9/nOVLYYe/dO/eJeQUNaGUF4m4Z5E7cb9oNTKabH+bNf19mqj60txTcveQxL0GlcWLXCxkOu2/LwL8oW0idIDA==
 
 normalize-url@^4.1.0:
   version "4.5.1"
