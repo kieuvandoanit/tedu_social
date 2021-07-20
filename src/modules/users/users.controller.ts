@@ -8,7 +8,7 @@ export default class UsersController{
 
     public register = async (req:Request, res:Response, next:NextFunction) => {
         try{
-            
+        
             const model:RegisterDto = req.body;
             const tokenData:TokenData = await this.userService.createUser(model);
             res.status(201).json(tokenData);

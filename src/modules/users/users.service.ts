@@ -61,16 +61,24 @@ class UserService{
             throw new HttpException(400, `User id is not exists.`);
         }
         
+        
+
         let avatar = user.avatar; 
         if(user.email === model.email){
             throw new HttpException(400, 'You must using the difference email');
-        }else{
-            avatar = gravatar.url(model.email!,{
-                size: '200',
-                rating: 'g',
-                default: 'mm'
-            });
         }
+        const checkEmailExist = await this.userSchema.find({ 
+            $and: [{email: {$eq:model.email}},{_id:{$ne:userId}}]
+        }).exec();
+        if(checkEmailExist.length !== 0){
+            throw new HttpException(400, 'Your email has been used by another user');
+        }
+
+        avatar = gravatar.url(model.email!,{
+            size: '200',
+            rating: 'g',
+            default: 'mm'
+        });
 
         let updateUserById; 
 
@@ -81,12 +89,12 @@ class UserService{
                 ...model,
                 avatar: avatar,
                 password: hashedPassword
-            }).exec();
+            },{new: true}).exec();
         }else{
             updateUserById = await this.userSchema.findByIdAndUpdate(userId,{
                 ...model,
                 avatar: avatar
-            }).exec();
+            },{new: true}).exec();
         }
         
         if(!updateUserById) throw new HttpException(409, 'You are not an user');
