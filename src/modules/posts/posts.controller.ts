@@ -58,6 +58,16 @@ export default class PostsController{
         } catch (error) {
             next(error);
         }
-        
+    }
+
+    public deletePost = async(req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const userId = req.user.id;
+            const postId = req.params.id;
+            const post = await this.postService.deletePost(userId, postId);
+            res.status(200).json(post);
+        } catch (error) {
+            next(error);
+        }
     }
 }
