@@ -3,6 +3,7 @@ import CreatePostDto from "./dtos/create_post.dto";
 import {PostSchema} from ".";
 import { IPost } from "./posts.interface";
 import { UserSchema } from "@modules/users";
+import { IPagination } from "@core/interfaces";
 
 export default class PostService{
     public async createPost(userId: string, postDto: CreatePostDto): Promise<IPost>{
@@ -29,4 +30,38 @@ export default class PostService{
 
         return updatePostById;
     } 
+
+    public async getAllPosts() : Promise<IPost[]>{
+        const posts = await PostSchema.find().sort({date: -1}).exec();
+        return posts;
+    }
+
+    public async getPostById(postId: string): Promise<IPost>{
+        const post = await PostSchema.findById(postId).exec();
+
+        if(!post){
+            throw new HttpException(400, "Post is not found");
+        }
+
+        return post;
+    }
+
+    public async getAllPaging(keyword: string, page: number):Promise<IPagination<IPost>>{
+        const pageSize: number = Number(process.env.PAGE_SIZE) || 10;
+        let query = {};
+        if(keyword){
+            query = {text: keyword};
+        }
+
+        const post = await PostSchema.find(query).skip((page-1) * pageSize).limit(pageSize).exec();
+        const rowCount = await PostSchema.find(query).estimatedDocumentCount().exec();
+
+        return {
+            total: rowCount,
+            page: page,
+            pageSize: pageSize,
+            items: post
+        } as IPagination<IPost>;
+    }
+
 }

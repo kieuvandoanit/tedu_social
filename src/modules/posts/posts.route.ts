@@ -17,5 +17,10 @@ export default class PostsRoute implements Route{
     private initializeRoutes(){
         this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreatePostDto, true), this.postController.createPost);
         this.router.put(`${this.path}/:id`,authMiddleware,  validationMiddleware(CreatePostDto, true), this.postController.updatePost);
+        this.router.get(`${this.path}`,this.postController.getAllPosts);
+        this.router.get(`${this.path}/:id`, this.postController.getPostById);
+        this.router.get(`${this.path}/paging/:page`, this.postController.getAllPaging);
+    
+    
     }
 }
