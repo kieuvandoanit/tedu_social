@@ -18,7 +18,7 @@ export default class IndexRoute implements Route{
     private initializeRoutes(){
         this.router.post(this.path, validationMiddleware(RegisterDto, true), this.usersController.register);
         this.router.get(this.path + '/:id', this.usersController.getUserById);
-        this.router.put(this.path + '/:id', validationMiddleware(RegisterDto, true), this.usersController.updateUser);
+        this.router.put(this.path + '/:id', authMiddleware, validationMiddleware(RegisterDto, true), this.usersController.updateUser);
         this.router.get(this.path, this.usersController.getAll);
         this.router.get(this.path + '/paging/:page', this.usersController.getAllPaging);
         this.router.delete(this.path + '/:id',authMiddleware, this.usersController.deleteUser);
