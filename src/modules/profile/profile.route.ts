@@ -4,6 +4,7 @@ import { Router } from "express";
 import CreateProfileDto from "./dtos/create_profile.dto";
 import AddExperienceDto from './dtos/add_experience.dto';
 import ProfileController from "./profile.controller";
+import AddEducationDto from "./dtos/add_education.dto";
 
 class ProfileRoute implements Route{
     public path = "/api/v1/profile";
@@ -22,6 +23,8 @@ class ProfileRoute implements Route{
         this.router.delete(`${this.path}/:id`,authMiddleware,this.profileController.deleteProfile);
         this.router.put(`${this.path}/experience`, authMiddleware, validationMiddleware(AddExperienceDto), this.profileController.createExperience);
         this.router.delete(`${this.path}/experience/:exp_id`,authMiddleware,this.profileController.deleteExperience);
+        this.router.put(`${this.path}/education`, authMiddleware, validationMiddleware(AddEducationDto), this.profileController.createEducation);
+        this.router.delete(`${this.path}/education/:edu_id`,authMiddleware,this.profileController.deleteEducation);
     }
 }
 
