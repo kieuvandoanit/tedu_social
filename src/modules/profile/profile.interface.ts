@@ -12,9 +12,15 @@ export interface IProfile{
     social: ISocial;
     followings: IFollower[],
     follower: IFollower[],
+    friends: IFriend[],
+    friend_request: IFriend[],
     date: Date
 }
 
+export interface IFriend{
+    user: string;
+    date: Date;
+}
 export interface IFollower{
     user: string;
 }

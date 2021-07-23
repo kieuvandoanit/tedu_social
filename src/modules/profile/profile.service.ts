@@ -1,7 +1,7 @@
 import { HttpException } from "@core/exceptions";
 import { IUser, UserSchema } from "@modules/users";
 import CreateProfileDto from "./dtos/create_profile.dto";
-import { IEducation, IExperience, IFollower, IProfile, ISocial } from "./profile.interface";
+import { IEducation, IExperience, IFollower, IFriend, IProfile, ISocial } from "./profile.interface";
 import ProfileSchema from "./profile.model";
 import normalize from 'normalize-url';
 import AddExperienceDto from "./dtos/add_experience.dto";
@@ -178,6 +178,109 @@ class ProfileService{
 
         if(!toProfile.follower) toProfile.follower = [];
         toProfile.follower = toProfile.follower.filter(({user}) => user.toString() !== fromUserId);
+
+        await fromProfile.save();
+        await toProfile.save();
+
+        return fromProfile;
+    }
+
+    public addFriend = async (fromUserId: string, toUserId: string) => {
+        const fromProfile = await ProfileSchema.findOne({user: fromUserId}).exec();
+        if(!fromProfile) throw new HttpException(400, 'There is not profile for your user');
+
+        const toProfile = await ProfileSchema.findOne({user: toUserId}).exec();
+        if(!toProfile) throw new HttpException(400, 'There is not profile for target user');
+
+        if(fromProfile.friends && fromProfile.friends.some((friend: IFriend) => friend.user.toString() === toUserId )){
+            throw new HttpException(400, 'Target user has already been be friend by from user');
+        }
+
+        if(toProfile.friends && toProfile.friends.some((friend: IFriend) => friend.user.toString() === fromUserId )){
+            throw new HttpException(400, 'You has been already send a friend request to this user');
+        }
+
+        if(!toProfile.friend_request) toProfile.friend_request = [];
+        toProfile.friend_request.unshift({user: fromUserId} as IFriend);
+
+        await toProfile.save();
+
+        return toProfile;
+    }
+
+    public acceptFriend = async (fromUserId: string, toUserId: string) => {
+        const fromProfile = await ProfileSchema.findOne({user: fromUserId}).exec();
+        if(!fromProfile) throw new HttpException(400, 'There is not profile for your user');
+
+        const toProfile = await ProfileSchema.findOne({user: toUserId}).exec();
+        if(!toProfile) throw new HttpException(400, 'There is not profile for target user');
+
+        if(fromProfile.friends && fromProfile.friends.some((friend: IFriend) => friend.user.toString() === toUserId )){
+            throw new HttpException(400, 'Target user has already been be friend by from user');
+        }
+
+        if(toProfile.friends && toProfile.friends.some((friend: IFriend) => friend.user.toString() === fromUserId )){
+            throw new HttpException(400, 'You has been already send a friend request to this user');
+        }
+
+        var isFriendRequest = 0;
+        if (fromProfile.friend_request){
+            fromProfile.friend_request.forEach((friend) => {
+                if(friend.user.toString() === toUserId){
+                    isFriendRequest = 1;
+                }
+            });
+        }
+        if(isFriendRequest === 0){
+            throw new HttpException(400, 'You has not been yet friend request this user');
+        }
+
+        fromProfile.friends.unshift({user: toUserId} as IFriend);
+        toProfile.friends.unshift({user: fromUserId} as IFriend);
+
+        fromProfile.friend_request = fromProfile.friend_request.filter(({user}) => user.toString() !== toUserId);
+
+        await toProfile.save();
+        await fromProfile.save();
+
+        return fromProfile;
+    }
+
+    public unFriend = async (fromUserId: string, toUserId: string) => {
+        const fromProfile = await ProfileSchema.findOne({user: fromUserId}).exec();
+        if(!fromProfile) throw new HttpException(400, 'There is not profile for your user');
+
+        const toProfile = await ProfileSchema.findOne({user: toUserId}).exec();
+        if(!toProfile) throw new HttpException(400, 'There is not profile for target user');
+
+        var isFriend1 = 0;
+        if (fromProfile.friends){
+            fromProfile.friends.forEach((friend) => {
+                if(friend.user.toString() === toUserId){
+                    isFriend1 = 1;
+                }
+            });
+        }
+        if(isFriend1 === 0){
+            throw new HttpException(400, 'You has not been yet friend this user');
+        }
+        
+
+        var isFriend2 = 0;
+        if (toProfile.friends){
+            toProfile.friends.forEach((friend) => {
+                if(friend.user.toString() === fromUserId){
+                    isFriend2 = 1;
+                }
+            });
+        }
+        if(isFriend2 === 0){
+            throw new HttpException(400, 'List friend in target user have not you');
+        }
+        
+        fromProfile.friends = fromProfile.friends.filter(({user}) => user.toString() !== toUserId);
+
+        toProfile.friends = toProfile.friends.filter(({user}) => user.toString() !== fromUserId);
 
         await fromProfile.save();
         await toProfile.save();

@@ -27,7 +27,12 @@ class ProfileRoute implements Route{
         this.router.delete(`${this.path}/education/:edu_id`,authMiddleware,this.profileController.deleteEducation);
         this.router.post(this.path+'/following/:to_id',authMiddleware,this.profileController.follow);
         this.router.delete(this.path+'/following/:to_id',authMiddleware,this.profileController.unFollow);
-    
+        this.router.post(this.path+'/friends/:id',authMiddleware,this.profileController.addFriend);
+        this.router.put(this.path+'/friends/:id',authMiddleware,this.profileController.acceptFriend);
+        this.router.delete(this.path+'/friends/:id',authMiddleware,this.profileController.unFriend);
+
+
+
     }
 }
 
