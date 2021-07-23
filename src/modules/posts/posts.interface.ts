@@ -5,11 +5,15 @@ export interface IPost{
     name: string;
     avatar: string;
     likes: ILike[];
+    shares: IShare[];
     comments: IComment[];
     date: Date;
 }
 
 export interface ILike{
+    user: string;
+}
+export interface IShare{
     user: string;
 }
 

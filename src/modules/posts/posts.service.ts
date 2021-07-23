@@ -1,7 +1,7 @@
 import { HttpException } from "@core/exceptions";
 import CreatePostDto from "./dtos/create_post.dto";
 import {PostSchema} from ".";
-import { IComment, ILike, IPost } from "./posts.interface";
+import { IComment, ILike, IPost, IShare } from "./posts.interface";
 import { UserSchema } from "@modules/users";
 import { IPagination } from "@core/interfaces";
 import CreateCommentDto from "./dtos/create_comment.dto";
@@ -139,6 +139,36 @@ export default class PostService{
         post.comments = post.comments.filter(({_id}) => _id.toString() !== commentId);
         await post.save();
         return post.comments;
+    }
+
+    public async sharePost(userId: string, postId: string): Promise<IShare[]>{
+        const post = await PostSchema.findById(postId).exec();
+        if(!post){
+            throw new HttpException(400, "Post is not found");
+        }
+
+        if(post.shares && post.shares.some((share:IShare) => share.user.toString() === userId)){
+            throw new HttpException(400, "Post already share");
+        }
+        post.shares.unshift({user: userId});
+        await post.save();
+        return post.shares;
+    }
+
+    public async unsharePost(userId: string, postId: string): Promise<IShare[]>{
+        const post = await PostSchema.findById(postId).exec();
+        if(!post){
+            throw new HttpException(400, "Post is not found");
+        }
+
+        // if(!post.shares)
+
+        if(post.shares && !post.shares.some((share:IShare) => share.user.toString() === userId)){
+            throw new HttpException(400, "Post has not yet been shared");
+        }
+        post.shares = post.shares.filter(({ user }) => user.toString() !== userId);
+        await post.save();
+        return post.shares;
     }
 
 }

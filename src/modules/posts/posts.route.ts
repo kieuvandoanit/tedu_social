@@ -22,10 +22,12 @@ export default class PostsRoute implements Route{
         this.router.get(`${this.path}/:id`, this.postController.getPostById);
         this.router.get(`${this.path}/paging/:page`, this.postController.getAllPaging);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.postController.deletePost);
-        this.router.put(`${this.path}/like/:id`,authMiddleware, this.postController.likePost);
-        this.router.put(`${this.path}/unlike/:id`,authMiddleware, this.postController.unlikePost);
+        this.router.post(`${this.path}/like/:id`,authMiddleware, this.postController.likePost);
+        this.router.delete(`${this.path}/like/:id`,authMiddleware, this.postController.unlikePost);
         this.router.post(this.path+'/comments/:id', authMiddleware,validationMiddleware(CreateCommentDto, true), this.postController.addComment);
         this.router.delete(this.path+'/comments/:id/:comment_id',authMiddleware, this.postController.removeComment);
-    
+        this.router.post(`${this.path}/share/:id`,authMiddleware, this.postController.sharePost);
+        this.router.delete(`${this.path}/share/:id`,authMiddleware, this.postController.unsharePost);
+        
     }
 }
