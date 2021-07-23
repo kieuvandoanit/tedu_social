@@ -1,7 +1,7 @@
 import { IPagination } from "@core/interfaces";
 import { NextFunction, Request, Response} from "express";
 import CreatePostDto from "./dtos/create_post.dto";
-import { IPost } from "./posts.interface";
+import { ILike, IPost } from "./posts.interface";
 import PostService from "./posts.service";
 
 export default class PostsController{
@@ -31,7 +31,7 @@ export default class PostsController{
 
     public getAllPosts = async (req: Request, res: Response, next: NextFunction) =>{
         try {
-            const posts = await this.postService.getAllPosts();
+            const posts:IPost[] = await this.postService.getAllPosts();
             res.status(200).json(posts);
         } catch (error) {
             next(error);
@@ -42,7 +42,7 @@ export default class PostsController{
     public getPostById = async (req: Request, res: Response, next: NextFunction) =>{
         try {
             const id = req.params.id;
-            const post = await this.postService.getPostById(id);
+            const post:IPost = await this.postService.getPostById(id);
             res.status(200).json(post);
         } catch (error) {
             next(error);
@@ -66,6 +66,25 @@ export default class PostsController{
             const postId = req.params.id;
             const post = await this.postService.deletePost(userId, postId);
             res.status(200).json(post);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public likePost = async(req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const postId = req.params.id;
+            const likes = await this.postService.likePost(req.user.id,postId);
+            res.status(200).json(likes);
+        } catch (error) {
+            next(error);
+        }
+    }
+    public unlikePost = async(req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const postId = req.params.id;
+            const likes = await this.postService.unlikePost(req.user.id,postId);
+            res.status(200).json(likes);
         } catch (error) {
             next(error);
         }

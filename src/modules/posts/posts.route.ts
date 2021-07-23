@@ -21,7 +21,8 @@ export default class PostsRoute implements Route{
         this.router.get(`${this.path}/:id`, this.postController.getPostById);
         this.router.get(`${this.path}/paging/:page`, this.postController.getAllPaging);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.postController.deletePost);
-    
+        this.router.put(`${this.path}/like/:id`,authMiddleware, this.postController.likePost);
+        this.router.put(`${this.path}/unlike/:id`,authMiddleware, this.postController.unlikePost);
     
     
     }
