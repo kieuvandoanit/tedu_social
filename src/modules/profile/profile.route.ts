@@ -25,11 +25,14 @@ class ProfileRoute implements Route{
         this.router.delete(`${this.path}/experience/:exp_id`,authMiddleware,this.profileController.deleteExperience);
         this.router.put(`${this.path}/education`, authMiddleware, validationMiddleware(AddEducationDto), this.profileController.createEducation);
         this.router.delete(`${this.path}/education/:edu_id`,authMiddleware,this.profileController.deleteEducation);
+        this.router.post(this.path+'/following/:to_id',authMiddleware,this.profileController.follow);
+        this.router.delete(this.path+'/following/:to_id',authMiddleware,this.profileController.unFollow);
+    
     }
 }
 
 export default ProfileRoute;
 
-function addExperienceDto(addExperienceDto: any): import("express-serve-static-core").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>> {
-    throw new Error("Function not implemented.");
-}
+// function addExperienceDto(addExperienceDto: any): import("express-serve-static-core").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>> {
+//     throw new Error("Function not implemented.");
+// }
