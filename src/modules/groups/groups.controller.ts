@@ -45,4 +45,26 @@ export default class GroupController{
             next(error);
         }
     }
+
+    public joinGroup = async (req: Request, res: Response, next:NextFunction) =>{
+        try {
+            const groupId = req.params.id;
+            const userId = req.user.id;
+            const result: IGroup = await this.groupService.joinGroup(userId, groupId);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public approveJoinRequest = async (req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const groupId = req.params.id;
+            const userId = req.params.user_id;
+            const result: IGroup = await this.groupService.approveJoinRequest(userId, groupId);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

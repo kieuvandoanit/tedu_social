@@ -19,7 +19,8 @@ export default class GroupRoute implements Route{
         this.router.get(this.path, this.groupController.getAllGroup);
         this.router.put(this.path+'/:id', authMiddleware,validationMiddleware(CreateGroupDto, true), this.groupController.updateGroup);
         this.router.delete(this.path+'/:id', authMiddleware,this.groupController.deleteGroup);
-
+        this.router.post(this.path+'/join/:id', authMiddleware,this.groupController.joinGroup);
+        this.router.put(this.path+'/join/:id/:user_id', authMiddleware,this.groupController.approveJoinRequest);
 
 
     }

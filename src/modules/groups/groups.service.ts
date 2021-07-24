@@ -2,7 +2,7 @@ import { HttpException } from "@core/exceptions";
 import { UserSchema } from "@modules/users";
 import GroupSchema from './groups.model';
 import CreateGroupDto from "./dtos/create_group.dto";
-import { IGroup } from "./groups.interface";
+import { IGroup, IMember } from "./groups.interface";
 
 export default class GroupService {
     public async createGroup(userId: string, groupDto: CreateGroupDto): Promise<IGroup>{
@@ -64,5 +64,40 @@ export default class GroupService {
         if(!deleteGroup) throw new HttpException(400, 'DeleteGroup is not success');
 
         return deleteGroup;
+    }
+
+    public async joinGroup(userId: string, groupId: string): Promise<IGroup>{
+        const user = await UserSchema.findById(userId).exec();
+        if(!user) throw new HttpException(400, 'User is not found');
+        
+        const group = await GroupSchema.findById(groupId).exec();
+        if(!group) throw new HttpException(400, 'Group is not found');
+
+        if(group.members && group.members.some((member: IMember) => member.user.toString() === userId)) throw new HttpException(400, 'User has been already a member');
+        if(group.member_requests && group.member_requests.some((member: IMember) => member.user.toString() === userId)) throw new HttpException(400, 'User has been send a request to join this group');
+        
+        group.member_requests.unshift({user: userId} as IMember);
+
+        await group.save();
+        return group;
+    }
+
+    public async approveJoinRequest(userId: string, groupId: string): Promise<IGroup>{
+        const user = await UserSchema.findById(userId).exec();
+        if(!user) throw new HttpException(400, 'User is not found');
+        
+        const group = await GroupSchema.findById(groupId).exec();
+        if(!group) throw new HttpException(400, 'Group is not found');
+
+        if(group.members && group.members.some((member: IMember) => member.user.toString() === userId)) throw new HttpException(400, 'User has been already a member');
+        
+        let haveRequest = 0;
+        if(group.member_requests && group.member_requests.some((member: IMember) => member.user.toString() !== userId)) throw new HttpException(400, 'There is not any request of this user');
+        
+        group.member_requests = group.member_requests.filter(({user}) => user.toString() !== userId);
+
+        group.members.unshift({user: userId} as IMember);
+        await group.save();
+        return group;
     }
 }

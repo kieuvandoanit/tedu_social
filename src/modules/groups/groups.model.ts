@@ -30,6 +30,10 @@ const GroupSchema = new mongoose.Schema({
             user: {
                 type: mongoose.Schema.Types.ObjectId,
             },
+            date: {
+                type: Date,
+                default: Date.now
+            }
 
         },
     ], 
@@ -38,6 +42,10 @@ const GroupSchema = new mongoose.Schema({
             user: {
                 type: mongoose.Schema.Types.ObjectId,
             },
+            date: {
+                type: Date,
+                default: Date.now
+            }
 
         },
     ], 
