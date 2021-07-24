@@ -1,5 +1,5 @@
 import { HttpException } from "@core/exceptions";
-import { UserSchema } from "@modules/users";
+import { IUser, UserSchema } from "@modules/users";
 import GroupSchema from './groups.model';
 import CreateGroupDto from "./dtos/create_group.dto";
 import { IGroup, IManager, IMember } from "./groups.interface";
@@ -92,7 +92,6 @@ export default class GroupService {
 
         if(group.members && group.members.some((member: IMember) => member.user.toString() === userId)) throw new HttpException(400, 'User has been already a member');
         
-        let haveRequest = 0;
         if(group.member_requests && group.member_requests.some((member: IMember) => member.user.toString() !== userId)) throw new HttpException(400, 'There is not any request of this user');
         
         group.member_requests = group.member_requests.filter(({user}) => user.toString() !== userId);
@@ -132,5 +131,17 @@ export default class GroupService {
         group.managers = group.managers.filter(({user}) => user.toString() !== userId);
         await group.save();
         return group;
+    }
+
+    public async getAllMember(groupId: string): Promise<IUser[]>{
+        const group = await GroupSchema.findById(groupId).exec();
+        if(!group) throw new HttpException(400, 'Group is not found');
+
+        const userId = group.members.map((member) =>{
+            return member.user;
+        });
+
+        const users = UserSchema.find({_id: userId}).select("-password").exec();
+        return users;
     }
 }

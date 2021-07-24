@@ -90,4 +90,16 @@ export default class GroupController{
             next(error);
         }
     }
+
+    public getAllMember = async (req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const groupId = req.params.id;
+            const users = await this.groupService.getAllMember(groupId);
+            res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    
 }
