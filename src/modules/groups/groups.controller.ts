@@ -24,4 +24,25 @@ export default class GroupController{
             next(error);
         }
     }
+
+    public updateGroup = async (req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const groupId = req.params.id;
+            const updateGroup:IGroup = req.body;
+            const result:IGroup = await this.groupService.updateGroup(groupId, updateGroup);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public deleteGroup = async (req: Request, res: Response, next:NextFunction)=>{
+        try {
+            const groupId = req.params.id;
+            const result:IGroup = await this.groupService.deleteGroup(groupId);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
