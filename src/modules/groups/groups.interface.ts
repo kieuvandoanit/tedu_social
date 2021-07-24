@@ -5,7 +5,7 @@ export interface IGroup{
     description: string;
     members: IMember[];
     member_requests: IMember[];
-    manager: IManager[];
+    managers: IManager[];
     creator: string;
 }
 
