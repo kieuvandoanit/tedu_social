@@ -101,5 +101,15 @@ export default class GroupController{
         }
     }
 
-    
+    public deleteMember = async (req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const groupId = req.params.id;
+            const userId = req.params.user_id;
+            const group = await this.groupService.removeMember(groupId, userId);
+            res.status(200).json(group);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
