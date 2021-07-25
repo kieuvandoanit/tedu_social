@@ -6,6 +6,17 @@ import ConversationSchema from './conversations.model';
 
 
 export default class ConversationService {
+
+    public async getMyConversation(userId: string):Promise<IConversation[]>{
+        const user = await UserSchema.findById(userId).exec();
+        if(!user) throw new HttpException(400, "User is not found");
+
+        const conversation = await ConversationSchema.find({$or: [{user1: userId}, {user2: userId}]}).exec();
+        if(!conversation) throw new HttpException(400, "You have not conversation");
+
+        return conversation;
+    }
+
     public async sendMessage(userId: string, dto: SendMessageDto):Promise<IConversation>{
         const user = await UserSchema.findById(userId).select('-password').exec();
         if(!user) throw new HttpException(400, 'User is not found');
