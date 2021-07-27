@@ -24,6 +24,8 @@
     - morgan: để logging cho dự án. (seri log)
     - cors: Cho phép những domain nào của client được vào
     - winston: làm cho log có màu đẹp hơn
+    - esLint: Là 1 thư viện js giúp ta đặt ra các cái rule. Buộc các developer phải tuân theo
+    - husky: đưa ra các cái rule để deverloper phải tuân theo trước khi commit code
 ### Lession 16
 - Validate var enviroment
 
@@ -31,3 +33,14 @@
 - import package tsconfig-paths: to nodemon understand đường dẫn  in import file (cu phap: @)
 - import package gravatar: để làm ảnh đại diện 
 - import package bcryptjs để mã hóa
+
+## ESLINT
+yarn add eslint @typescript -eslint/parser @typescript-eslint/eslint-plugin -D
+
+### Cau hinh webpack
+- add 5 package:
+    - webpack
+    - webpack-cli
+    - webpack-node-externals
+    - webpack-shell-plugin
+    - tsconfig-paths-webpack-plugin
